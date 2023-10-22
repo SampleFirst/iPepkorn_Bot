@@ -1,6 +1,6 @@
 #--Main----#
-pyrogram==2.0.30
-tgcrypto==1.2.5
+pyrogram>=2.0.30
+tgcrypto
 aiofiles==22.1.0     
 aiohttp==3.8.3
 requests
