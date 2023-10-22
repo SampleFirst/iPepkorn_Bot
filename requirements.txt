@@ -34,7 +34,7 @@ wheel
 ujson
 wget
 pytz
-httpcore
+httpcore>=0.9.0
 
 Flask==2.2.2
 gunicorn==20.1.0
