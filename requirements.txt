@@ -38,5 +38,5 @@ pytz
 
 Flask==2.2.2
 gunicorn==20.1.0
-pip==23.2.1
+pip==23.3.1
 
