@@ -25,7 +25,7 @@ G_MODE = {}
 SPELL_CHECK = {}
 
 
-@Client.on_message(filters.command('autofilter') & filters.group & admin_fliter)
+@Client.on_message(filters.command('autofilter') & filters.group & admin_filter)
 async def fil_mod(client, message): 
       mode_on = ["yes", "on", "true"]
       mode_of = ["no", "off", "false"]
@@ -48,7 +48,7 @@ async def fil_mod(client, message):
           await m.edit("𝚄𝚂𝙴 :- `/autofilter on` 𝙾𝚁 `/autofilter off`")
 
 
-@Client.on_message(filters.command('g_filter') & filters.group & admin_fliter)
+@Client.on_message(filters.command('g_filter') & filters.group & admin_filter)
 async def g_fil_mod(client, message): 
       mode_on = ["yes", "on", "true"]
       mode_of = ["no", "off", "false"]
