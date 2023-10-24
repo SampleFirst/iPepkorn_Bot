@@ -211,8 +211,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 await asyncio.sleep(600)
                 await Joel_tgx.delete()
                 await file_send.delete()
-            else:
-                await query.answer(f"Hey {query.from_user.first_name}, This is not your movie request. Request yours!", show_alert=True)
         except Exception as e:
             await query.answer(f"⚠️ Eʀʀᴏʀ {e}", show_alert=True)
     
