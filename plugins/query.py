@@ -546,6 +546,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             ),
             reply_markup=InlineKeyboardMarkup(buttons)
         )
+        await query.answer("Thanks For Useing Us")
     
     elif query.data == "help":
         if query.from_user.id not in ADMINS:
@@ -574,6 +575,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 ),
                 reply_markup=InlineKeyboardMarkup(buttons)
             )
+            await query.answer("Thanks For Useing Us")
         else:
             buttons = [
                 [
@@ -597,7 +599,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 ),
                 reply_markup=InlineKeyboardMarkup(buttons)
             )
-    
+            await query.answer("Thanks For Useing Us")
+        
     elif query.data == "about":
         buttons = [
             [
@@ -621,6 +624,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             ),
             reply_markup=InlineKeyboardMarkup(buttons)
         )
+        await query.answer("Thanks For Useing Us")
     
     elif query.data == "source":
         buttons = [
@@ -636,7 +640,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InputMediaPhoto(random.choice(PICS), script.SOURCE_TXT, enums.ParseMode.HTML),
             reply_markup=InlineKeyboardMarkup(buttons)
         )
-    
+        await query.answer("Thanks For Useing Us")
+        
     elif query.data == "admin":
         buttons = [
             [
@@ -660,6 +665,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InputMediaPhoto(stats_pic, script.ADMIN_TXT, enums.ParseMode.HTML),
             reply_markup=InlineKeyboardMarkup(buttons)
         )
+        await query.answer("Thanks For Useing Us")
         
     elif query.data == "openfilter":
         buttons = [
@@ -679,6 +685,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InputMediaPhoto(random.choice(PICS), script.FILTER_TXT, enums.ParseMode.HTML),
             reply_markup=InlineKeyboardMarkup(buttons)
         )
+        await query.answer("Thanks For Useing Us")
     
     elif query.data == "autofilter":
         buttons = [
@@ -691,6 +698,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InputMediaPhoto(random.choice(PICS), script.AUTOFILTER_TXT, enums.ParseMode.HTML),
             reply_markup=InlineKeyboardMarkup(buttons)
         )
+        await query.answer("Thanks For Useing Us")
     
     elif query.data == "manuelfilter":
         buttons = [
@@ -706,6 +714,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InputMediaPhoto(random.choice(PICS), script.MANUELFILTER_TXT, enums.ParseMode.HTML),
             reply_markup=InlineKeyboardMarkup(buttons)
         )
+        await query.answer("Thanks For Useing Us")
     
     elif query.data == "globalfilter":
         buttons = [
@@ -723,6 +732,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InputMediaPhoto(random.choice(PICS), script.GLOBALFILTER_TXT, enums.ParseMode.HTML),
             reply_markup=InlineKeyboardMarkup(buttons)
         )
+        await query.answer("Thanks For Useing Us")
     
     elif query.data.startswith("button"):
         buttons = [
@@ -735,6 +745,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InputMediaPhoto(random.choice(PICS), script.BUTTON_TXT, enums.ParseMode.HTML),
             reply_markup=InlineKeyboardMarkup(buttons)
         )
+        await query.answer("Thanks For Useing Us")
         
     elif query.data == "coct":
         buttons = [
@@ -747,6 +758,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InputMediaPhoto(random.choice(PICS), script.CONNECTION_TXT, enums.ParseMode.HTML),
             reply_markup=InlineKeyboardMarkup(buttons)
         )
+        await query.answer("Thanks For Useing Us")
     
     elif query.data == "newdata":
         buttons = [
@@ -759,6 +771,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InputMediaPhoto(random.choice(PICS), script.FILE_TXT, enums.ParseMode.HTML),
             reply_markup=InlineKeyboardMarkup(buttons)
         )
+        await query.answer("Thanks For Useing Us")
     
     elif query.data == "extmod":
         buttons = [
@@ -771,6 +784,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InputMediaPhoto(random.choice(PICS), script.EXTRAMOD_TXT, enums.ParseMode.HTML),
             reply_markup=InlineKeyboardMarkup(buttons)
         )
+        await query.answer("Thanks For Useing Us")
     
     elif query.data == "gpmanager":
         buttons = [
@@ -783,6 +797,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InputMediaPhoto(random.choice(PICS), script.GROUPMANAGER_TXT, enums.ParseMode.HTML),
             reply_markup=InlineKeyboardMarkup(buttons)
         )
+        await query.answer("Thanks For Useing Us")
         
     elif query.data == "stats":
         buttons = [
@@ -802,6 +817,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InputMediaPhoto(random.choice(PICS), script.STATUS_TXT.format(total, users, chats, monsize, free), enums.ParseMode.HTML),
             reply_markup=InlineKeyboardMarkup(buttons)
         )
+        await query.answer("Thanks For Useing Us")
     
     elif query.data == "restats":
         await query.answer("Fetching MongoDb DataBase")
