@@ -189,11 +189,13 @@ async def dkick(client, message):
 @Client.on_message((filters.channel | filters.group) & filters.command('instatus'))
 async def instatus(client, message):
     user = await client.get_chat_member(message.chat.id, message.from_user.id)
-    if user.status not in (enums.ChatMemberStatus.ADMINISTRATOR, enums.ChatMemberStatus.OWNER, ADMINS):
-        note = await message.reply("you are not administrator in this chat")
+    if user.status not in (enums.ChatMemberStatus..ADMINISTRATOR, enums.ChatMemberStatus..OWNER) and user.user.id not in ADMINS:
+        note = await message.reply("You are not an administrator in this chat.")
         await asyncio.sleep(3)
         await message.delete()
-        return await note.delete()
+        await note.delete()
+        return
+
     sent_message = await message.reply_text("🔁 Processing.....")
     recently = 0
     within_week = 0
@@ -202,21 +204,29 @@ async def instatus(client, message):
     deleted_acc = 0
     uncached = 0
     bot = 0
-    for member in client.get_chat_members(message.chat.id):
-        if member.user.is_deleted: deleted_acc += 1
-        elif member.user.is_bot: bot += 1
-        elif member.user.status == enums.UserStatus.RECENTLY: recently += 1
-        elif member.user.status == enums.UserStatus.LAST_WEEK: within_week += 1
-        elif member.user.status == enums.UserStatus.LAST_MONTH: within_month += 1
-        elif member.user.status == enums.UserStatus.LONG_AGO: long_time_ago += 1
-        else: uncached += 1
-    if message.chat.type == enums.ChatType.CHANNEL:
-        await sent_message.edit(f"{message.chat.title}\nChat Member Status\n\nRecently - {recently}\nWithin Week - {within_week}\nWithin Month - {within_month}\nLong Time Ago - {long_time_ago}\n\nDeleted Account - {deleted_acc}\nBot - {bot}\nUnCached - {uncached}")            
-    elif message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
+
+    async for member in client.iter_chat_members(message.chat.id):
+        if member.user.is_deleted:
+            deleted_acc += 1
+        elif member.user.is_bot:
+            bot += 1
+        elif member.user.status == UserStatus.RECENTLY:
+            recently += 1
+        elif member.user.status == UserStatus.LAST_WEEK:
+            within_week += 1
+        elif member.user.status == UserStatus.LAST_MONTH:
+            within_month += 1
+        elif member.user.status == UserStatus.LONG_AGO:
+            long_time_ago += 1
+        else:
+            uncached += 1
+
+    chat_type = message.chat.type
+    if chat_type == ChatType.CHANNEL:
         await sent_message.edit(f"{message.chat.title}\nChat Member Status\n\nRecently - {recently}\nWithin Week - {within_week}\nWithin Month - {within_month}\nLong Time Ago - {long_time_ago}\n\nDeleted Account - {deleted_acc}\nBot - {bot}\nUnCached - {uncached}")
-        
-            
-  
+    elif chat_type in [ChatType.GROUP, ChatType.SUPERGROUP]:
+        await sent_message.edit(f"{message.chat.title}\nChat Member Status\n\nRecently - {recently}\nWithin Week - {within_week}\nWithin Month - {within_month}\nLong Time Ago - {long_time_ago}\n\nDeleted Account - {deleted_acc}\nBot - {bot}\nUnCached - {uncached}")
+
 
 
 
