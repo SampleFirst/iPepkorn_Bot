@@ -217,7 +217,7 @@ Free Disk: {}"""
 
     FORCE_SUB_TEXT = "Sorry, you have not joined my channel, so please click the join button to join my channel and try again."
 
-    WELCOME_TEXT = """Hey {user} 💞
+    WELCOM_TEXT = """Hey {user} 💞
 
 Welcome to {chat}.
 
