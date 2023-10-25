@@ -16,30 +16,70 @@ BATCH_FILES = {}
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
     if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
-        buttons = [[           
-            InlineKeyboardButton('📢 Uᴩᴅᴀᴛᴇꜱ 📢', url=f'https://t.me/{SUPPORT_CHAT}')
-            ],[
-            InlineKeyboardButton('ℹ️ Hᴇʟᴩ ℹ️', url=f"https://t.me/{temp.U_NAME}?start=help")
-        ]]
-        await message.reply(START_MESSAGE.format(user=message.from_user.mention if message.from_user else message.chat.title, bot=client.mention), reply_markup=InlineKeyboardMarkup(buttons), disable_web_page_preview=True)                    
-        await asyncio.sleep(2) 
+        buttons = [
+            [
+                InlineKeyboardButton('Updates', url=MAIN_CHANNEL)
+            ],
+            [
+                InlineKeyboardButton('Help', url=f"https://t.me/{temp.U_NAME}?start=help"),
+            ]
+        ]
+        reply_markup = InlineKeyboardMarkup(buttons)
+        mention = message.from_user.mention if message.from_user else message.chat.title
+        await message.reply(script.START_TXT.format(mention, temp.U_NAME, temp.B_NAME), reply_markup=reply_markup)
+        await asyncio.sleep(2)
         if not await db.get_chat(message.chat.id):
-            total = await client.get_chat_members_count(message.chat.id)
-            await client.send_message(LOG_CHANNEL, script.LOG_TEXT_G.format(a=message.chat.title, b=message.chat.id, c=message.chat.username, d=total, f=client.mention, e="Unknown"))       
+            total_members = await client.get_chat_members_count(message.chat.id)
+            total_chats = await db.total_chat_count() + 1
+            daily_chats = await db.daily_chats_count(today) + 1
+            tz = pytz.timezone('Asia/Kolkata')
+            now = datetime.now(tz)
+            time = now.strftime('%I:%M:%S %p')
+            today = now.date()
+            await client.send_message(LOG_CHANNEL, script.LOG_TEXT_G.format(
+                a=message.chat.title,
+                b=message.chat.id,
+                c=message.chat.username,
+                d=total_members,
+                e=total_chats,
+                f=daily_chats,
+                g=str(today),
+                h=time,
+                i="Unknown",
+                j=temp.B_NAME,
+                k=temp.U_NAME
+            ))
             await db.add_chat(message.chat.id, message.chat.title, message.chat.username)
-        return 
+        return
+
     if not await db.is_user_exist(message.from_user.id):
         await db.add_user(message.from_user.id, message.from_user.first_name)
-        await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention, message.from_user.username, temp.U_NAME))
+        total_users = await db.total_users_count()
+        daily_users = await db.daily_users_count(today)
+        tz = pytz.timezone('Asia/Kolkata')
+        now = datetime.now(tz)
+        time = now.strftime('%I:%M:%S %p')
+        today = now.date()
+        await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(
+            a=message.from_user.id,
+            b=message.from_user.mention,
+            c=message.from_user.username,
+            d=total_users,
+            e=daily_users,
+            f=str(today),
+            g=time,
+            h=temp.B_NAME,
+            i=temp.U_NAME
+        ))
     if len(message.command) != 2:
         buttons = [[
-            InlineKeyboardButton("➕️ Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Cʜᴀᴛ ➕", url=f"http://t.me/{temp.U_NAME}?startgroup=true")
+            InlineKeyboardButton("➕️ Add Me to Your Chat ➕", url=f"http://t.me/{temp.U_NAME}?startgroup=true")
             ],[
-            InlineKeyboardButton("Sᴇᴀʀᴄʜ 🔎", switch_inline_query_current_chat=''), 
-            InlineKeyboardButton("Cʜᴀɴɴᴇʟ 🔈", url="https://t.me/mkn_bots_updates")
+            InlineKeyboardButton("🔍 Search", switch_inline_query_current_chat=''), 
+            InlineKeyboardButton("📢 Channel", url="https://t.me/iPepkornBots")
             ],[      
-            InlineKeyboardButton("Hᴇʟᴩ 🕸️", callback_data="help"),
-            InlineKeyboardButton("Aʙᴏᴜᴛ ✨", callback_data="about")
+            InlineKeyboardButton("ℹ️ Help", callback_data="help"),
+            InlineKeyboardButton("📚 About", callback_data="about")
         ]]
         m = await message.reply_sticker("CAACAgUAAxkBAAEBvlVk7YKnYxIHVnKW2PUwoibIR2ygGAACBAADwSQxMYnlHW4Ls8gQHgQ") 
         await asyncio.sleep(2)
@@ -50,32 +90,40 @@ async def start(client, message):
         try:
             invite_link = await client.create_chat_invite_link(int(AUTH_CHANNEL))
         except ChatAdminRequired:
-            logger.error("MAKE SURE BOT IS ADMIN IN FORCESUB CHANNEL")
+            logger.error("Make sure Bot is admin in Forcesub channel")
             return
-        btn = [[InlineKeyboardButton("Jᴏɪɴ Mʏ Cʜᴀɴɴᴇʟ ✨", url=invite_link.invite_link)]]
+        btn = [
+            [
+                InlineKeyboardButton("📢 Join Update Channel", url='https://youtube.com/@InvisibleYTV')
+            ],
+            [
+                InlineKeyboardButton("📢 Join Update Channel", url=invite_link.invite_link)
+            ]
+        ]
+
         if message.command[1] != "subscribe":
             try:
                 kk, file_id = message.command[1].split("_", 1)
                 pre = 'checksubp' if kk == 'filep' else 'checksub' 
-                btn.append([InlineKeyboardButton("⟳ Tʀʏ Aɢᴀɪɴ", callback_data=f"{pre}#{file_id}")])
+                btn.append([InlineKeyboardButton(" 🔄 Try Again", callback_data=f"{pre}#{file_id}")])
             except (IndexError, ValueError):
-                btn.append([InlineKeyboardButton("⟳ Tʀʏ Aɢᴀɪɴ", url=f"https://t.me/{temp.U_NAME}?start={message.command[1]}")])
-                
-        try:
-            return await client.send_message(chat_id=message.from_user.id, text=FORCE_SUB_TEXT, reply_markup=InlineKeyboardMarkup(btn), parse_mode=enums.ParseMode.DEFAULT)
-        except Exception as e:
-            print(f"Force Sub Text Error\n{e}")
-            return await client.send_message(chat_id=message.from_user.id, text=script.FORCE_SUB_TEXT, reply_markup=InlineKeyboardMarkup(btn), parse_mode=enums.ParseMode.DEFAULT)
-        
+                btn.append([InlineKeyboardButton(" 🔄 Try Again", url=f"https://t.me/{temp.U_NAME}?start={message.command[1]}")])
+        await client.send_message(
+            chat_id=message.from_user.id,
+            text="**Please Join My Both Updates Channel to use this Bot!**",
+            reply_markup=InlineKeyboardMarkup(btn),
+            parse_mode=enums.ParseMode.MARKDOWN
+            )
+        return
     if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
         buttons = [[
-            InlineKeyboardButton("➕️ Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Cʜᴀᴛ ➕", url=f"http://t.me/{temp.U_NAME}?startgroup=true")
+            InlineKeyboardButton("➕️ Add Me to Your Chat ➕", url=f"http://t.me/{temp.U_NAME}?startgroup=true")
             ],[
-            InlineKeyboardButton("Sᴇᴀʀᴄʜ 🔎", switch_inline_query_current_chat=''), 
-            InlineKeyboardButton("Cʜᴀɴɴᴇʟ 🔈", url="https://t.me/mkn_bots_updates")
+            InlineKeyboardButton("🔍 Search", switch_inline_query_current_chat=''), 
+            InlineKeyboardButton("📢 Channel", url="https://t.me/iPepkornBots")
             ],[      
-            InlineKeyboardButton("Hᴇʟᴩ 🕸️", callback_data="help"),
-            InlineKeyboardButton("Aʙᴏᴜᴛ ✨", callback_data="about")
+            InlineKeyboardButton("ℹ️ Help", callback_data="help"),
+            InlineKeyboardButton("📚 About", callback_data="about")
         ]]
         m = await message.reply_sticker("CAACAgUAAxkBAAEBvlVk7YKnYxIHVnKW2PUwoibIR2ygGAACBAADwSQxMYnlHW4Ls8gQHgQ")
         await asyncio.sleep(2)
