@@ -190,5 +190,5 @@ class Database:
             return new_status
         return False
 
-db = Database(DATABASE_URI, DATABASE_NAME)
+db = Database(DATABASE_URL, DATABASE_NAME)
 
