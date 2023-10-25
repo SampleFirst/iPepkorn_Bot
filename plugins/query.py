@@ -552,9 +552,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if query.from_user.id not in ADMINS:
             buttons = [
                 [
-                    InlineKeyboardButton('Admin Panel', 'admin')
-                ],
-                [
                     InlineKeyboardButton('Filters', 'openfilter'),
                     InlineKeyboardButton('Connect', 'coct')
                 ],
@@ -578,6 +575,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.answer("Thanks For Useing Us")
         else:
             buttons = [
+                [
+                    InlineKeyboardButton('Admin Panel', 'admin')
+                ],
                 [
                     InlineKeyboardButton('Filters', 'openfilter'),
                     InlineKeyboardButton('Connect', 'coct')
