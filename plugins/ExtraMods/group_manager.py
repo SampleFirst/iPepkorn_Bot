@@ -189,7 +189,7 @@ async def dkick(client, message):
 @Client.on_message((filters.channel | filters.group) & filters.command('instatus'))
 async def instatus(client, message):
     user = await client.get_chat_member(message.chat.id, message.from_user.id)
-    if user.status not in (enums.ChatMemberStatus..ADMINISTRATOR, enums.ChatMemberStatus..OWNER) and user.user.id not in ADMINS:
+    if user.status not in (enums.ChatMemberStatus.ADMINISTRATOR, enums.ChatMemberStatus.OWNER) and user.user.id not in ADMINS:
         note = await message.reply("You are not an administrator in this chat.")
         await asyncio.sleep(3)
         await message.delete()
