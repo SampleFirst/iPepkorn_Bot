@@ -136,7 +136,9 @@ async def save_group(bot, message):
                         i=date,
                         j=time,
                         k=temp.U_NAME
-                    ))
+                    ),
+                    disable_web_page_preview=True
+                )  
         else:
             # Log new members joining the group
             tz = timezone('Asia/Kolkata')
@@ -158,7 +160,9 @@ async def save_group(bot, message):
                     i=date,
                     j=time,
                     k=temp.U_NAME
-                ))
+                ),
+                disable_web_page_preview=True
+            )  
 
         if settings["auto_delete"]:
             await asyncio.sleep(600)
@@ -197,7 +201,9 @@ async def goodbye(bot, message):
             i=date,
             j=time,
             k=temp.U_NAME
-        ))
+        ),
+        disable_web_page_preview=True
+    )  
 
 @Client.on_message(filters.command('leave') & filters.user(ADMINS))
 async def leave_a_chat(bot, message):
