@@ -55,7 +55,7 @@ class Bot(Client):
         self.username = me.username
         self.log_channel = LOG_CHANNEL
         self.uptime = UPTIME
-        curr = datetime.datetime.now(pytz.timezone("Asia/Kolkata"))
+        curr = datetime.now(pytz.timezone("Asia/Kolkata"))
         date = curr.strftime('%d %B, %Y')
         time = curr.strftime('%I:%M:%S %p')
         logging.info(f"{me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
