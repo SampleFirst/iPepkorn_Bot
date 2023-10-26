@@ -52,7 +52,7 @@ async def save_group(bot, message):
 
         if message.chat.id in temp.BANNED_CHATS:
             buttons = [[
-                InlineKeyboardButton('Support', url=f'https://t.me/{SUPPORT_CHAT}')
+                InlineKeyboardButton('Support', url=SUPPORT_CHAT)
             ]]
             reply_markup = InlineKeyboardMarkup(buttons)
             message_text = '<b>CHAT NOT ALLOWED 🐞\n\nMy admins have restricted me from working here! If you want to know more about it, contact support.</b>'
