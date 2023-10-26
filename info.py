@@ -54,7 +54,9 @@ SHORT_API = environ.get("SHORT_API")
 
 # Other Chats 
 LOG_CHANNEL = int(environ.get('LOG_CHANNEL', 0))
-SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'MKN_BOTZ_DISCUSSION_GROUP')
+SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'https://t.me/+Eqy9OBo2MPBlOWJl')
+MAIN_CHANNEL = environ.get('MAIN_CHANNEL', 'https://t.me/+UQSz8l_tSqc3MjJl')
+UPDATE_CHANNEL = environ.get('UPDATE_CHANNEL', 'https://t.me/+sbXkYLOq0jtlMDc1')
 FILE_FORWARD = environ.get('FILE_FORWARD', "https://t.me/+IASDysIDZG5kMDhl")
 FILE_CHANNEL = int(environ.get('FILE_CHANNEL', 0))
 FILE_STORE_CHANNEL = [int(ch) for ch in (environ.get('FILE_STORE_CHANNEL', '')).split()]
