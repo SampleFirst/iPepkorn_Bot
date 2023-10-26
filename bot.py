@@ -1,5 +1,6 @@
 import os, math, logging, datetime, pytz
 import logging.config
+from datetime import date, datetime 
 
 from pyrogram.errors import BadRequest, Unauthorized
 from pyrogram import Client
@@ -61,10 +62,6 @@ class Bot(Client):
             await web.TCPSite(app, "0.0.0.0", 8080).start()
             logger.info("Web Response Is Running......🕸️")
             
-    async def stop(self, *args):
-        await super().stop()
-        me = await self.get_me()
-        logger.info(f"{me.first_name} is_...  ♻️Restarting...")
 
         # Add a job to send a message at 11:59 PM daily
         await self.send_report_message()
@@ -102,7 +99,13 @@ class Bot(Client):
             else:
                 # Sleep for 1 minute and check again
                 await asyncio.sleep(60)
-     
+
+    async def stop(self, *args):
+        await super().stop()
+        me = await self.get_me()
+        logger.info(f"{me.first_name} is_...  ♻️Restarting...")
+
+
     async def iter_messages(self, chat_id: Union[int, str], limit: int, offset: int = 0) -> Optional[AsyncGenerator["types.Message", None]]:                       
         current = offset
         while True:
