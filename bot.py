@@ -1,19 +1,24 @@
-import os, math, logging, datetime, pytz
+import os
+import math
+import logging
+import pytz
 import logging.config
-from datetime import date, datetime 
-
+import asyncio
+from datetime import date, datetime
+ 
 from pyrogram.errors import BadRequest, Unauthorized
-from pyrogram import Client
-from pyrogram import types
+from pyrogram.raw.all import layer
+from pyrogram import Client, __version__, types
 
 from database.ia_filterdb import Media
 from database.users_chats_db import db
-from info import API_ID, API_HASH, BOT_TOKEN, LOG_CHANNEL, UPTIME, WEBHOOK, LOG_MSG
-from utils import temp, __repo__, __license__, __copyright__, __version__
+from utils import temp
 from typing import Union, Optional, AsyncGenerator
-
-from plugins import web_server 
+from plugins import web_server
 from aiohttp import web
+from Script import script
+
+from info import API_ID, API_HASH, BOT_TOKEN, ADMINS, LOG_CHANNEL, UPTIME, WEBHOOK
 
 # Get logging configurations
 logging.config.fileConfig("logging.conf")
@@ -38,7 +43,7 @@ class Bot(Client):
     async def start(self):
         b_users, b_chats = await db.get_banned()
         temp.BANNED_USERS = b_users
-        temp.BANNED_CHATS = b_chats        
+        temp.BANNED_CHATS = b_chats
         await super().start()
         await Media.ensure_indexes()
         me = await self.get_me()
@@ -52,20 +57,33 @@ class Bot(Client):
         self.uptime = UPTIME
         curr = datetime.datetime.now(pytz.timezone("Asia/Kolkata"))
         date = curr.strftime('%d %B, %Y')
-        tame = curr.strftime('%I:%M:%S %p')
-        logger.info(LOG_MSG.format(me.first_name, date, tame, __repo__, __version__, __license__, __copyright__))
-        try: await self.send_message(LOG_CHANNEL, text=LOG_MSG.format(me.first_name, date, tame, __repo__, __version__, __license__, __copyright__), disable_web_page_preview=True)   
-        except Exception as e: logger.warning(f"Bot Isn't Able To Send Message To LOG_CHANNEL \n{e}")
+        time = curr.strftime('%I:%M:%S %p')
+        logging.info(f"{me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
+        try:
+            await self.send_message(LOG_CHANNEL, text=script.RESTART_TXT.format(
+                a=today, 
+                b=time, 
+                c=temp.U_NAME
+            )
+        )
+        except Exception as e:
+            logger.warning(f"Bot Isn't Able To Send Message To LOG_CHANNEL \n{e}")
+
+        for admin_id in ADMINS:
+            try:
+                await self.send_message(admin_id, text=f"Bot started successfully at {date}, {time}.\nsend command /start")
+            except Exception as e:
+                logger.warning(f"Bot Isn't Able To Send Message To Admin {admin_id} \n{e}")
+
         if WEBHOOK is True:
             app = web.AppRunner(await web_server())
             await app.setup()
             await web.TCPSite(app, "0.0.0.0", 8080).start()
             logger.info("Web Response Is Running......🕸️")
-            
 
         # Add a job to send a message at 11:59 PM daily
         await self.send_report_message()
-    
+
     async def send_report_message(self):
         while True:
             tz = pytz.timezone('Asia/Kolkata')
@@ -82,14 +100,14 @@ class Bot(Client):
 
             if now.hour == 23 and now.minute == 59:
                 await self.send_message(
-                    chat_id=LOG_CHANNEL, 
+                    chat_id=LOG_CHANNEL,
                     text=script.REPORT_TXT.format(
                         a=formatted_date_1,
                         b=formatted_date_2,
                         c=time,
-                        d=total_users, 
+                        d=total_users,
                         e=total_chats,
-                        f=today_users, 
+                        f=today_users,
                         g=today_chats,
                         h=temp.U_NAME
                     )
@@ -100,28 +118,23 @@ class Bot(Client):
                 # Sleep for 1 minute and check again
                 await asyncio.sleep(60)
 
+    async def iter_messages(self, chat_id: Union[int, str], limit: int, offset: int = 0) -> Optional[
+        AsyncGenerator["types.Message", None]]:
+        current = offset
+        while True:
+            new_diff = min(200, limit - current)
+            if new_diff <= 0:
+                return
+            messages = await self.get_messages(chat_id, list(range(current, current + new_diff + 1)))
+            for message in messages:
+                yield message
+                current += 1
+
     async def stop(self, *args):
         await super().stop()
         me = await self.get_me()
         logger.info(f"{me.first_name} is_...  ♻️Restarting...")
 
 
-    async def iter_messages(self, chat_id: Union[int, str], limit: int, offset: int = 0) -> Optional[AsyncGenerator["types.Message", None]]:                       
-        current = offset
-        while True:
-            new_diff = min(200, limit - current)
-            if new_diff <= 0:
-                return
-            messages = await self.get_messages(chat_id, list(range(current, current+new_diff+1)))
-            for message in messages:
-                yield message
-                current += 1
-
-
-        
 Bot().run()
-
-
-
-
 
