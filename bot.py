@@ -61,7 +61,7 @@ class Bot(Client):
         logging.info(f"{me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
         try:
             await self.send_message(LOG_CHANNEL, text=script.RESTART_TXT.format(
-                a=today, 
+                a=date, 
                 b=time, 
                 c=temp.U_NAME
             )
