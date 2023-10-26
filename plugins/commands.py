@@ -648,26 +648,49 @@ async def settings(client, message):
 
     settings = await get_settings(grp_id)
     if settings is not None:
-        buttons = [[
-            InlineKeyboardButton(f"ꜰɪʟᴛᴇʀ ʙᴜᴛᴛᴏɴ : {'sɪɴɢʟᴇ' if settings['button'] else 'ᴅᴏᴜʙʟᴇ'}", f'setgs#button#{settings["button"]}#{str(grp_id)}')
-            ],[
-            InlineKeyboardButton(f"ꜰɪʟᴇ ɪɴ ᴩᴍ ꜱᴛᴀʀᴛ: {'ᴏɴ' if settings['botpm'] else 'ᴏꜰꜰ'}", f'setgs#botpm#{settings["botpm"]}#{str(grp_id)}')
-            ],[                
-            InlineKeyboardButton(f"ʀᴇꜱᴛʀɪᴄᴛ ᴄᴏɴᴛᴇɴᴛ : {'ᴏɴ' if settings['file_secure'] else 'ᴏꜰꜰ'}", f'setgs#file_secure#{settings["file_secure"]}#{str(grp_id)}')
-            ],[
-            InlineKeyboardButton(f"ɪᴍᴅʙ ɪɴ ꜰɪʟᴛᴇʀ : {'ᴏɴ' if settings['imdb'] else 'ᴏꜰꜰ'}", f'setgs#imdb#{settings["imdb"]}#{str(grp_id)}')
-            ],[
-            InlineKeyboardButton(f"ꜱᴩᴇʟʟɪɴɢ ᴄʜᴇᴄᴋ : {'ᴏɴ' if settings['spell_check'] else 'ᴏꜰꜰ'}", f'setgs#spell_check#{settings["spell_check"]}#{str(grp_id)}')
-            ],[
-            InlineKeyboardButton(f"ᴡᴇʟᴄᴏᴍᴇ ᴍᴇꜱꜱᴀɢᴇ : {'ᴏɴ' if settings['welcome'] else 'ᴏꜰꜰ'}", f'setgs#welcome#{settings["welcome"]}#{str(grp_id)}')
-        ]]
-        await message.reply_text(
-            text=f"<b>Cʜᴀɴɢᴇ Yᴏᴜʀ Sᴇᴛᴛɪɴɢꜱ Fᴏʀ {title} Aꜱ Yᴏᴜʀ Wɪꜱʜ ⚙</b>",
-            reply_markup=InlineKeyboardMarkup(buttons),
-            quote=True, 
-            disable_web_page_preview=True,
-            parse_mode=enums.ParseMode.HTML,
-        )
+        if str(user_id) in ADMINS:
+            buttons = [
+                [
+                    InlineKeyboardButton(f"Filter Button : {'Single' if settings['button'] else 'Double'}", f'setgs#button#{settings["button"]}#{str(group_id)}')
+                ],
+                [
+                    InlineKeyboardButton(f"File in : {'Channel' if settings['botpm'] else 'Bot PM'}", f'setgs#botpm#{settings["botpm"]}#{str(group_id)}')
+                ],
+                [
+                    InlineKeyboardButton(f"Protect Content : {'ON' if settings['file_secure'] else 'OFF'}", f'setgs#file_secure#{settings["file_secure"]}#{str(group_id)}')
+                ],
+                [
+                    InlineKeyboardButton(f"IMDB : {'ON' if settings['imdb'] else 'OFF'}", f'setgs#imdb#{settings["imdb"]}#{str(group_id)}')
+                ],
+                [
+                    InlineKeyboardButton(f"Spelling Check : {'OFF' if settings['spell_check'] else 'ON'}", f'setgs#spell_check#{settings["spell_check"]}#{str(group_id)}')
+                ],
+                [
+                    InlineKeyboardButton(f"Welcome Message : {'OFF' if settings['welcome'] else 'ON'}", f'setgs#welcome#{settings["welcome"]}#{str(group_id)}')
+                ]
+            ]
+        else:
+            buttons = [
+                [
+                    InlineKeyboardButton(f"Filter Button : {'Single' if settings['button'] else 'Double'}", f'setgs#button#{settings["button"]}#{str(group_id)}')
+                ],
+                [
+                    InlineKeyboardButton(f"IMDB : {'ON' if settings['imdb'] else 'OFF'}", f'setgs#imdb#{settings["imdb"]}#{str(group_id)}')
+                ],
+                [
+                    InlineKeyboardButton(f"Spelling Check : {'OFF' if settings['spell_check'] else 'ON'}", f'setgs#spell_check#{settings["spell_check"]}#{str(group_id)}')
+                ],
+                [
+                    InlineKeyboardButton(f"Welcome Message : {'OFF' if settings['welcome'] else 'ON'}", f'setgs#welcome#{settings["welcome"]}#{str(group_id)}')
+                ]
+            ]
+            await message.reply_text(
+                text=f"<b>Change your settings for {title} as you wish ⚙</b>",
+                reply_markup=InlineKeyboardMarkup(buttons),
+                quote=True,
+                disable_web_page_preview=True,
+                parse_mode=enums.ParseMode.HTML,
+            )
 
 
 
