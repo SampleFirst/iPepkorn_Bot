@@ -323,3 +323,13 @@ Share & Support, request the movies you wanted"""
 📆 Year: <a href={url}/releaseinfo>{year}</a>
 🌟 Rating: <a href={url}/ratings>{rating}</a>/10
 """
+
+    RESTART_TXT = """#Restarted
+
+🔄 Bot Restarted!
+📅 Date: <code>{a}</code>
+⏰ Time: <code>{b}</code>
+🌐 Timezone: <code>Asia/Kolkata</code>
+
+#{c}
+#Restart_{c}"""
