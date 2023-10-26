@@ -1,22 +1,38 @@
+import os
+import re
+import asyncio
+import logging
+import shutil
+import psutil
+import time
+import sys
+
 from pyrogram import Client, filters, enums
 from pyrogram.errors import ChatAdminRequired
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from pyrogram.errors.exceptions.bad_request_400 import MessageTooLong, PeerIdInvalid, UserNotParticipant, MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 
-from info import ADMINS, LOG_CHANNEL, SUPPORT_CHAT, WELCOM_PIC, WELCOM_TEXT, IMDB_TEMPLATE
-from utils import get_size, temp, extract_user, get_file_id, get_poster, humanbytes
 from database.users_chats_db import db
 from database.ia_filterdb import Media
 
+from pytz import timezone
+from datetime import date, datetime
+from utils import get_size, temp, extract_user, get_file_id, get_poster, humanbytes
 from Script import script
-import logging, re, asyncio, time, shutil, psutil, os, sys
+
+from info import (
+    ADMINS, 
+    LOG_CHANNEL, 
+    MAIN_CHANNEL, 
+    UPDATE_CHANNEL, 
+    BOTS_CHANNEL, 
+    SUPPORT_CHAT, 
+    WELCOM_PIC, 
+    IMDB_TEMPLATE
+)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
-
-
-from pytz import timezone  # Import the 'timezone' module
-from datetime import datetime
 
 
 # Handler for saving group information when new members join
@@ -101,14 +117,16 @@ async def save_group(bot, message):
                     except Exception as e:
                         print(e)
     
-                welcome_message = script.MELCOW_ENG.format(new_member.mention, message.chat.title)
+                welcome_message = script.WELCOM_TEXT.format(user=new_member.mention, chat=message.chat.title)
                 temp.MELCOW['welcome'] = await message.reply_photo(
-                    photo=MELCOW_IMG,
+                    photo=WELCOM_PIC,
                     caption=welcome_message,
                     reply_markup=InlineKeyboardMarkup(
                         [
                             [
-                                InlineKeyboardButton('Support Group', url=S_GROUP),
+                                InlineKeyboardButton('Support Group', url=SUPPORT_CHAT)
+                            ],
+                            [
                                 InlineKeyboardButton('Updates Channel', url=MAIN_CHANNEL)
                             ]
                         ]
