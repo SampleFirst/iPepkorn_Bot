@@ -43,14 +43,14 @@ async def start(client, message):
     if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         buttons = [
             [
-                InlineKeyboardButton('Update 📢', url=UPDATE_CHANNEL')
+                InlineKeyboardButton("Update 📢", url=UPDATE_CHANNEL)
             ],
             [
                 InlineKeyboardButton("Support Group", url=SUPPORT_CHAT), 
                 InlineKeyboardButton("Bots Channel", url=BOTS_CHANNEL)
             ],
             [
-                InlineKeyboardButton('Help ℹ️', url=f"https://t.me/{temp.U_NAME}?start=help")
+                InlineKeyboardButton("Help ℹ️", url=f"https://t.me/{temp.U_NAME}?start=help")
             ]
         ]
         await message.reply(START_MESSAGE.format(user=message.from_user.mention if message.from_user else message.chat.title, bot=client.mention), reply_markup=InlineKeyboardMarkup(buttons), disable_web_page_preview=True)                    
