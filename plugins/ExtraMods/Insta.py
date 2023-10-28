@@ -6,7 +6,7 @@ import os
 
 
 
-@Client.on_message(Filters.command("insta"))
+@Client.on_message(filters.command("insta"))
 def get_instagram_media(client, message):
     # Get the Instagram link from the command arguments
     link = message.text.split(" ", 1)[1]
