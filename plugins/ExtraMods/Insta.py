@@ -1,11 +1,37 @@
 import pyrogram
-from pyrogram import filters, Client
-from pyrogram.types import Message
+from pyrogram import Client, filters
 import requests
-import os
 
 
+# Function to get the Instagram post image
+def get_instagram_post_image(link):
+    try:
+        response = requests.get(link)
+        if response.status_code == 200:
+            html = response.text
+            start_index = html.find("display_url") + 15
+            end_index = html.find('"', start_index)
+            image_url = html[start_index:end_index]
+            return image_url
+    except Exception as e:
+        print(e)
+    return None
 
+# Function to get the Instagram reel video
+def get_instagram_reel_video(link):
+    try:
+        response = requests.get(link)
+        if response.status_code == 200:
+            html = response.text
+            start_index = html.find("video_url") + 12
+            end_index = html.find('"', start_index)
+            video_url = html[start_index:end_index]
+            return video_url
+    except Exception as e:
+        print(e)
+    return None
+
+# Command handler for /insta
 @Client.on_message(filters.command("insta"))
 def get_instagram_media(client, message):
     # Get the Instagram link from the command arguments
@@ -44,31 +70,3 @@ def get_instagram_media(client, message):
             chat_id=message.chat.id,
             text="Please provide a valid Instagram post or reel link."
         )
-
-def get_instagram_post_image(link):
-    try:
-        response = requests.get(link)
-        if response.status_code == 200:
-            html = response.text
-            start_index = html.find("display_url") + 15
-            end_index = html.find('"', start_index)
-            image_url = html[start_index:end_index]
-            return image_url
-    except Exception as e:
-        print(e)
-    return None
-
-def get_instagram_reel_video(link):
-    try:
-        response = requests.get(link)
-        if response.status_code == 200:
-            html = response.text
-            start_index = html.find("video_url") + 12
-            end_index = html.find('"', start_index)
-            video_url = html[start_index:end_index]
-            return video_url
-    except Exception as e:
-        print(e)
-    return None
-
-
