@@ -1,7 +1,9 @@
 import pyrogram
-from pyrogram import Filters, Message
+from pyrogram import filters, Client
+from pyrogram.types import Message
 import requests
 import os
+
 
 
 @Client.on_message(Filters.command("insta"))
